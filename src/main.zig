@@ -5,6 +5,13 @@ const ls_cmd = @import("ls.zig");
 const rm_cmd = @import("rm.zig");
 const find_cmd = @import("find.zig");
 const grep_cmd = @import("grep.zig");
+const cat_cmd = @import("cat.zig");
+const mkdir_cmd = @import("mkdir.zig");
+const touch_cmd = @import("touch.zig");
+const pwd_cmd = @import("pwd.zig");
+const echo_cmd = @import("echo.zig");
+const cp_cmd = @import("cp.zig");
+const mv_cmd = @import("mv.zig");
 
 pub fn main() anyerror!void {
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
@@ -63,6 +70,69 @@ pub fn main() anyerror!void {
         grep_cmd.run(allocator, sub_args) catch |err| {
             if (err == error.InvalidArgs) return;
             common.printError("grep failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "cat")) {
+        cat_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("cat failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "mkdir")) {
+        mkdir_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("mkdir failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "touch")) {
+        touch_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("touch failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "pwd")) {
+        pwd_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("pwd failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "echo")) {
+        echo_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("echo failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "cp")) {
+        cp_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("cp failed: {s}", .{@errorName(err)});
+            return err;
+        };
+        return;
+    }
+
+    if (std.mem.eql(u8, subcommand, "mv")) {
+        mv_cmd.run(allocator, sub_args) catch |err| {
+            if (err == error.InvalidArgs) return;
+            common.printError("mv failed: {s}", .{@errorName(err)});
             return err;
         };
         return;

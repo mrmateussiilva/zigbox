@@ -84,14 +84,44 @@ pub fn printRootHelp() void {
             "  ls      List directory contents\n" ++
             "  rm      Remove files/directories\n" ++
             "  find    Find files by name/type\n" ++
-            "  grep    Search text in files\n\n" ++
+            "  grep    Search text in files\n" ++
+            "  cat     Print file contents\n" ++
+            "  mkdir   Create directories\n" ++
+            "  touch   Create empty files\n" ++
+            "  pwd     Print current directory\n" ++
+            "  echo    Print text\n" ++
+            "  cp      Copy files/directories\n" ++
+            "  mv      Move/rename files/directories\n\n" ++
             "Global options:\n" ++
             "  -h, --help    Show this help\n\n" ++
             "Examples:\n" ++
             "  zigbox ls -la .\n" ++
             "  zigbox rm -ri build/\n" ++
             "  zigbox find . -name \"*.zig\" -type f\n" ++
-            "  zigbox grep -r \"TODO\" src\n\n" ++
+            "  zigbox grep -r \"TODO\" src\n" ++
+            "  zigbox mkdir -p tmp/demo\n" ++
+            "  zigbox touch tmp/demo/file.txt\n" ++
+            "  zigbox cat tmp/demo/file.txt\n" ++
+            "  zigbox cp tmp/demo/file.txt /tmp/\n" ++
+            "  zigbox mv /tmp/file.txt /tmp/file2.txt\n\n" ++
             "Run 'zigbox <subcommand> --help' for command-specific help.\n",
     ) catch {};
+}
+
+pub fn renderProgress(op: []const u8, path: []const u8, done: u64, total: u64) !void {
+    var buf: [256]u8 = undefined;
+    const pct: u64 = if (total == 0) 100 else @min(100, (done * 100) / total);
+    const width: u64 = 24;
+    const fill: usize = @intCast((pct * width) / 100);
+
+    var i: usize = 0;
+    while (i < width) : (i += 1) {
+        buf[i] = if (i < fill) '#' else '-';
+    }
+
+    try writeFmt(stderrFile(), "\r{s} [{s}] {d:>3}% {s}", .{ op, buf[0..width], pct, path });
+}
+
+pub fn finishProgress() !void {
+    try stderrFile().writeAll("\n");
 }
