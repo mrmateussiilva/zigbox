@@ -28,43 +28,6 @@ jobs:
       - name: Build (ReleaseFast)
         run: zig build -Doptimize=ReleaseFast
 
-      - name: Smoke Tests
+      - name: End-to-End Extreme Tests
         shell: bash
-        run: |
-          set -euo pipefail
-
-          TMP_DIR="$(mktemp -d)"
-          trap 'rm -rf "$TMP_DIR"' EXIT
-
-          # Base files
-          mkdir -p "$TMP_DIR/src" "$TMP_DIR/dst"
-          printf 'hello world\nTODO item\n' > "$TMP_DIR/src/input.txt"
-
-          # Basic commands
-          zig build run -- pwd > /dev/null
-          zig build run -- echo -n hello > "$TMP_DIR/echo.out"
-          test "$(cat "$TMP_DIR/echo.out")" = "hello"
-
-          zig build run -- mkdir -p "$TMP_DIR/src/sub"
-          zig build run -- touch "$TMP_DIR/src/sub/a.txt"
-          test -f "$TMP_DIR/src/sub/a.txt"
-
-          # cp / mv with multi-source
-          zig build run -- cp "$TMP_DIR/src/input.txt" "$TMP_DIR/src/sub/a.txt" "$TMP_DIR/dst"
-          test -f "$TMP_DIR/dst/input.txt"
-          test -f "$TMP_DIR/dst/a.txt"
-
-          zig build run -- mv "$TMP_DIR/dst/input.txt" "$TMP_DIR/dst/a.txt" "$TMP_DIR/src"
-          test -f "$TMP_DIR/src/input.txt"
-          test -f "$TMP_DIR/src/a.txt"
-
-          # find / grep / ls / cat
-          zig build run -- find "$TMP_DIR/src" -name "*.txt" -type f > "$TMP_DIR/find.out"
-          grep -q "input.txt" "$TMP_DIR/find.out"
-
-          zig build run -- grep "TODO" "$TMP_DIR/src/input.txt" > "$TMP_DIR/grep.out"
-          grep -q "TODO" "$TMP_DIR/grep.out"
-
-          zig build run -- ls -la "$TMP_DIR/src" > /dev/null
-          zig build run -- cat "$TMP_DIR/src/input.txt" > "$TMP_DIR/cat.out"
-          grep -q "hello world" "$TMP_DIR/cat.out"
+        run: ./tests/e2e_extreme.sh
