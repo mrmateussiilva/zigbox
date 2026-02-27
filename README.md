@@ -151,6 +151,112 @@ Exemplo:
 zigbox grep -r "TODO" src
 ```
 
+### 5) `cat`
+
+Imprime o conteúdo de arquivos.
+
+Uso:
+
+```bash
+zigbox cat <path>...
+```
+
+### 6) `mkdir`
+
+Cria diretórios.
+
+Uso:
+
+```bash
+zigbox mkdir [flags] <dir>...
+```
+
+Flags:
+
+- `-p`, `--parents`: cria pais e ignora diretório já existente
+
+### 7) `touch`
+
+Cria arquivos vazios caso não existam.
+
+Uso:
+
+```bash
+zigbox touch [flags] <file>...
+```
+
+Flags:
+
+- `-c`, `--no-create`: não cria arquivo ausente
+
+### 8) `pwd`
+
+Mostra o diretório atual.
+
+Uso:
+
+```bash
+zigbox pwd [flags]
+```
+
+Flags:
+
+- `-L`, `--logical`: usa `PWD` quando disponível (padrão)
+- `-P`, `--physical`: resolve symlinks
+
+### 9) `echo`
+
+Imprime texto no stdout.
+
+Uso:
+
+```bash
+zigbox echo [flags] [text...]
+```
+
+Flags:
+
+- `-n`: não adiciona quebra de linha no final
+
+### 10) `cp`
+
+Copia arquivos e diretórios.
+
+Uso:
+
+```bash
+zigbox cp [flags] <src...> <dst>
+```
+
+Flags:
+
+- `-r`, `--recursive`: copia diretórios recursivamente
+- `-f`, `--force`: sobrescreve destino
+
+Observação:
+
+- Barra de progresso embutida por padrão durante cópia de arquivos.
+- Com múltiplas fontes, o destino deve ser diretório existente.
+
+### 11) `mv`
+
+Move/renomeia arquivos e diretórios.
+
+Uso:
+
+```bash
+zigbox mv [flags] <src...> <dst>
+```
+
+Flags:
+
+- `-f`, `--force`: sobrescreve destino
+
+Observação:
+
+- Barra de progresso embutida por padrão quando precisa copiar+apagar (ex.: entre filesystems).
+- Com múltiplas fontes, o destino deve ser diretório existente.
+
 ## Ajuda
 
 Ajuda global:
